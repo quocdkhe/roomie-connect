@@ -1,0 +1,52 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: roomie-connect-be
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5433/filedb}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      max-lifetime: 1800000  # 30 phút (ms), nên giảm xuống
+      idle-timeout: 600000   # 10 phút
+      connection-timeout: 30000 # 30s
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  security:
+    oauth2:
+      resource-server:
+        jwt:
+          issuer-uri: ${ISSUER_URI:http://localhost:8001/realms/group1}
+          jwk-set-uri: ${JWK_SET_URL:http://localhost:8001/realms/group1/protocol/openid-connect/certs}
+      client:
+        registration:
+          keycloak:
+            client-id: ${CLIENT_ID:roomie-connect_app}
+            client-secret: ${CLIENT_SECRET:wm9KcmIbhLPr25HzwXyUomfaW3P4xH45}
+            authorization-grant-type: authorization_code
+            scope: openid,profile,email
+            redirect-uri: ${REDIRECT_URI:http://localhost:3000/*}
+        provider:
+          keycloak:
+            authorization-uri: ${AUTHORIZATION_URI:http://localhost:8001/realms/group1/protocol/openid-connect/auth}
+            token-uri: ${TOKEN_URI:http://localhost:8001/realms/group1/protocol/openid-connect/token}
+            user-info-uri: ${USER_INFO_URI:http://localhost:8001/realms/group1/protocol/openid-connect/userinfo}
+            jwk-set-uri: ${JWK_SET_URI:http://localhost:8001/realms/group1/protocol/openid-connect/certs}
+            user-name-attribute: preferred_username
+
+
+idp:
+  client:
+    id: ${CLIENT_ID:roomie-connect_app}
+    secret: ${CLIENT_SECRET:pAjbdjOvlBitMxumeso9xZd9U3A143za}
+  token:
+    endpoint: ${TOKEN_URI:http://localhost:8001}

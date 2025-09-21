@@ -1,0 +1,35 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: login_be
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${ISSUER_URI:http://localhost:8001/realms/group1}
+          jwk-set-uri: ${JWK_SET_URL:http://localhost:8001/realms/group1/protocol/openid-connect/certs}
+      client:
+        registration:
+          keycloak:
+            client-id: ${CLIENT_ID:roomie-connect_app}
+            client-secret: ${CLIENT_SECRET:wm9KcmIbhLPr25HzwXyUomfaW3P4xH45}
+            authorization-grant-type: authorization_code
+            scope: openid,profile,email
+            redirect-uri: ${REDIRECT_URI:http://localhost:3000/*}
+        provider:
+          keycloak:
+            authorization-uri: ${AUTHORIZATION_URI:http://localhost:8001/realms/group1/protocol/openid-connect/auth}
+            token-uri: ${TOKEN_URI:http://localhost:8001/realms/group1/protocol/openid-connect/token}
+            user-info-uri: ${USER_INFO_URI:http://localhost:8001/realms/group1/protocol/openid-connect/userinfo}
+            jwk-set-uri: ${JWK_SET_URI:http://localhost:8001/realms/group1/protocol/openid-connect/certs}
+            user-name-attribute: preferred_username
+
+idp:
+  url: ${PROFILE_SERVICE_URL:http://localhost:8001}
+  client:
+    id: ${CLIENT_ID:roomie-connect_app}
+    secret: ${CLIENT_SECRET:pAjbdjOvlBitMxumeso9xZd9U3A143za}
+  token:
+    endpoint: ${TOKEN_URI:http://localhost:8001}

@@ -1,0 +1,56 @@
+#networks
+networks:
+  roomie-connect:
+    driver: bridge
+    name: roomie-connect
+
+#volumes
+volumes:
+  postgres-keycloak-data:
+    name: postgres-keycloak-data
+  keycloak_data:
+    name: keycloak_data
+
+#services
+services:
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: keycloak-microservice
+    environment:
+      - KC_BOOTSTRAP_ADMIN_USERNAME=${KC_BOOTSTRAP_ADMIN_USERNAME:-keycloak}
+      - KC_BOOTSTRAP_ADMIN_PASSWORD=${KC_BOOTSTRAP_ADMIN_PASSWORD:-keycloak}
+      - KC_HOSTNAME_STRICT=false
+      - KC_HOSTNAME_STRICT_HTTPS=false
+      - KC_METRICS_ENABLED=true
+      - KC_HEALTH_ENABLED=true
+      - KC_DB=postgres
+      - KC_DB_URL=jdbc:postgresql://postgres-keycloak:5432/keycloak
+      - KC_DB_USERNAME=${POSTGRES_USER:-postgres}
+      - KC_DB_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+    ports:
+      - "8001:8080"
+    command: start-dev
+    restart: always
+    networks:
+      - microservice-network
+    volumes:
+      - keycloak_data:/opt/keycloak/data
+    depends_on:
+      - postgres-keycloak
+
+  postgres-keycloak:
+    image: postgres:latest
+    container_name: postgres-keycloak-microservice
+    hostname: postgres-keycloak
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=keycloak
+    ports:
+      - '5434:5432'
+    volumes:
+      - postgres-keycloak-data:/var/lib/postgresql/data
+    restart: always
+    networks:
+      - microservice-network

@@ -12,24 +12,24 @@ import org.springframework.web.bind.annotation.*;
 
 @FeignClient(name = "identity-client", url = "${idp.token.endpoint}")
 public interface IdentityClient {
-    @PostMapping(value = "/realms/hoangnam/protocol/openid-connect/token", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    @PostMapping(value = "/realms/group1/protocol/openid-connect/token", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     TokenExchangeResponse exchangeToken(@QueryMap TokenExchangeParam tokenExchangeParam);
 
-    @PostMapping(value = "/admin/realms/hoangnam/users", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/admin/realms/group1/users", consumes = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<?> createUser(
             @RequestHeader("authorization") String token
             , @RequestBody UserCreationParam userCreationParam);
 
-    @PostMapping(value = "/realms/hoangnam/protocol/openid-connect/token", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    @PostMapping(value = "/realms/group1/protocol/openid-connect/token", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     TokenExchangeResponse getUserToken(@RequestHeader("authorization") String token, @QueryMap TokenExchangeParamUser tokenExchangeParamUser);
 
-    @PutMapping(value = "/admin/realms/hoangnam/users/{user-id}/reset-password", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/admin/realms/group1/users/{user-id}/reset-password", consumes = MediaType.APPLICATION_JSON_VALUE)
     Credential changePassword(@RequestHeader("authorization") String token, @RequestBody Credential credential, @PathVariable("user-id") String userId);
 
 
-    @PostMapping(value = "/admin/realms/hoangnam/users/{user-id}/logout")
+    @PostMapping(value = "/admin/realms/group1/users/{user-id}/logout")
     void logoutKeyloak(@RequestHeader("authorization") String token, @PathVariable("user-id") String userId);
 
-    @PostMapping(value = "/realms/hoangnam/protocol/openid-connect/token", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    @PostMapping(value = "/realms/group1/protocol/openid-connect/token", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     TokenExchangeResponse getTokenOauth2(@QueryMap TokenExchangeOauth2 tokenExchangeOauth2);
 }

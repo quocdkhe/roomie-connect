@@ -52,25 +52,5 @@ public class ImageServiceImpl implements ImageService {
                 .build();
     }
 
-    @Override
-    public UrlImageResponse getImageUrl(String userId) {
-        var userProfile = profileUserRepository.findById(userId).get();
-        if (Objects.isNull(userProfile))
-            return UrlImageResponse.builder()
-                    .urlImage("image is not existed !")
-                    .build();
 
-        try {
-            return UrlImageResponse.builder()
-                    .urlImage(minioClient.getPresignedObjectUrl(GetPresignedObjectUrlArgs.builder()
-                            .bucket(BUCKET_NAME_AVAR)
-                            .object(userProfile.getAvatar())
-                            .expiry(604800)
-                            .method(Method.GET)
-                            .build()))
-                    .build();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
 }

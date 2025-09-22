@@ -93,3 +93,16 @@ services:
     volumes:
       - minio-data:/data
 
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin4-container
+    environment:
+      PGADMIN_DEFAULT_EMAIL: lenam7546@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: 123123
+    ports:
+      - 8888:80
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    restart: always
+    networks:
+      - roomie-connect

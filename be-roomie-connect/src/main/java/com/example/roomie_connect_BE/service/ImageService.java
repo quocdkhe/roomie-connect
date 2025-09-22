@@ -8,5 +8,4 @@ import org.springframework.web.multipart.MultipartFile;
 public interface ImageService {
     ImageResponse postImage(MultipartFile fileImage, String userId) throws Exception;
 
-    UrlImageResponse getImageUrl(String userId);
 }

@@ -12,4 +12,5 @@ public class Utilities {
         String userId = ((JwtAuthenticationToken) authentication).getToken().getSubject();
         return userId;
     }
+
 }

@@ -12,7 +12,7 @@ public interface ProfileUserService {
 
     ProfileUserResponse createProfileUser(ProfileUserRequest profileUserRequest);
 
-    ProfileUserResponse getProfileUserByUserId(HttpServletRequest request);
+    ProfileUserResponse getProfileUserByUserId();
 
     ProfileUserResponse updateProfileUserByUserId(String userId, MultipartFile fileImage) throws Exception;
 

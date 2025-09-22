@@ -9,6 +9,7 @@ import com.example.roomie_connect_BE.mapper.ProfileUserMapper;
 import com.example.roomie_connect_BE.repository.ProfileUserRepository;
 import com.example.roomie_connect_BE.service.JWTService;
 import com.example.roomie_connect_BE.service.ProfileUserService;
+import com.example.roomie_connect_BE.utils.Utilities;
 import io.minio.GetPresignedObjectUrlArgs;
 import io.minio.MinioClient;
 import io.minio.errors.*;
@@ -40,6 +41,7 @@ public class ProfileUserServiceImpl implements ProfileUserService {
     private final String BUCKET_NAME_AVAR = "image-avar";
     private final MinioClient minioClient;
     private final JWTService jwtService;
+    private final Utilities utilities;
 
     @Override
     public ProfileUserResponse createProfileUser(ProfileUserRequest profileUserRequest) {
@@ -55,13 +57,8 @@ public class ProfileUserServiceImpl implements ProfileUserService {
     }
 
     @Override
-    public ProfileUserResponse getProfileUserByUserId(HttpServletRequest request) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !(authentication.getPrincipal() instanceof Jwt)) {
-            throw new RuntimeException("No authentication found in security context");
-        }
-        Jwt jwt = (Jwt) authentication.getPrincipal();
-        String userId = jwt.getSubject();
+    public ProfileUserResponse getProfileUserByUserId() {
+        String userId = utilities.getUserId();
         ProfileUser user = profileUserRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 

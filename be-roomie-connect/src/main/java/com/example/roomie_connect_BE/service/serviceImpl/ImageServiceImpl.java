@@ -4,7 +4,9 @@ package com.example.roomie_connect_BE.service.serviceImpl;
 import com.example.roomie_connect_BE.dto.response.ImageResponse;
 import com.example.roomie_connect_BE.dto.response.UrlImageResponse;
 import com.example.roomie_connect_BE.repository.ProfileUserRepository;
+import com.example.roomie_connect_BE.service.AIService;
 import com.example.roomie_connect_BE.service.ImageService;
+import com.example.roomie_connect_BE.utils.Utilities;
 import io.minio.*;
 import io.minio.http.Method;
 import lombok.RequiredArgsConstructor;
@@ -23,9 +25,12 @@ public class ImageServiceImpl implements ImageService {
 
     private final ProfileUserRepository profileUserRepository;
 
+    private final Utilities utilities;
+
+    private final AIService aiService;
 
     @Override
-    public ImageResponse postImage(MultipartFile fileImage, String userId) throws Exception {
+    public ImageResponse postImage(MultipartFile imageAvar) throws Exception {
         var booleanExistedBucket = minioClient
                 .bucketExists(BucketExistsArgs.builder().bucket(BUCKET_NAME_AVAR).build());
         if (!booleanExistedBucket) {
@@ -33,18 +38,17 @@ public class ImageServiceImpl implements ImageService {
                     .bucket(BUCKET_NAME_AVAR)
                     .build());
         }
-        String imageName = fileImage.getOriginalFilename() + System.currentTimeMillis();
+
+        String imageName = imageAvar.getOriginalFilename() + System.currentTimeMillis();
         minioClient.putObject(
                 PutObjectArgs.builder()
                         .bucket(BUCKET_NAME_AVAR)
                         .object(imageName)
-                        .stream(fileImage.getInputStream(), fileImage.getSize(), -1)
-                        .contentType(fileImage.getContentType())
+                        .stream(imageAvar.getInputStream(), imageAvar.getSize(), -1)
+                        .contentType(imageAvar.getContentType())
                         .build());
 
-        var userProfile = profileUserRepository.findById(userId).get();
-        userProfile.setAvatar(imageName);
-        profileUserRepository.save(userProfile);
+
 
         return ImageResponse.builder()
                 .imgName(imageName)
@@ -53,4 +57,37 @@ public class ImageServiceImpl implements ImageService {
     }
 
 
+
+    @Override
+    public ImageResponse postImageVerify(MultipartFile imageAvar, MultipartFile imageVerify) throws Exception {
+        var check = aiService.verifyUserImage(imageAvar,imageVerify);
+        if(check == false) return null;
+
+        var booleanExistedBucket = minioClient
+                .bucketExists(BucketExistsArgs.builder().bucket(BUCKET_NAME_AVAR).build());
+        if (!booleanExistedBucket) {
+            minioClient.makeBucket(MakeBucketArgs.builder()
+                    .bucket(BUCKET_NAME_AVAR)
+                    .build());
+        }
+
+
+        String imageName = imageAvar.getOriginalFilename() + System.currentTimeMillis();
+        minioClient.putObject(
+                PutObjectArgs.builder()
+                        .bucket(BUCKET_NAME_AVAR)
+                        .object(imageName)
+                        .stream(imageAvar.getInputStream(), imageAvar.getSize(), -1)
+                        .contentType(imageAvar.getContentType())
+                        .build());
+
+        var userProfile = profileUserRepository.findById(utilities.getUserId()).get();
+        userProfile.setAvatar(imageName);
+        profileUserRepository.save(userProfile);
+
+        return ImageResponse.builder()
+                .imgName(imageName)
+                .buckName(BUCKET_NAME_AVAR)
+                .build();
+    }
 }

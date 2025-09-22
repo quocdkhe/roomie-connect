@@ -1,12 +1,12 @@
 package com.example.roomie_connect_BE.service.serviceImpl;
 
-import com.example.roomie_connect_BE.controller.ImageController;
 import com.example.roomie_connect_BE.dto.request.ProfileUserRequest;
 import com.example.roomie_connect_BE.dto.response.ProfileUserResponse;
 import com.example.roomie_connect_BE.dto.response.UrlImageResponse;
 import com.example.roomie_connect_BE.entity.ProfileUser;
 import com.example.roomie_connect_BE.mapper.ProfileUserMapper;
 import com.example.roomie_connect_BE.repository.ProfileUserRepository;
+import com.example.roomie_connect_BE.service.ImageService;
 import com.example.roomie_connect_BE.service.JWTService;
 import com.example.roomie_connect_BE.service.ProfileUserService;
 import com.example.roomie_connect_BE.utils.Utilities;
@@ -37,11 +37,11 @@ public class ProfileUserServiceImpl implements ProfileUserService {
 
     private final ProfileUserRepository profileUserRepository;
     private final ProfileUserMapper profileUserMapper;
-    private final ImageController imageController;
     private final String BUCKET_NAME_AVAR = "image-avar";
     private final MinioClient minioClient;
     private final JWTService jwtService;
     private final Utilities utilities;
+    private final ImageService imageService;
 
     @Override
     public ProfileUserResponse createProfileUser(ProfileUserRequest profileUserRequest) {
@@ -86,20 +86,20 @@ public class ProfileUserServiceImpl implements ProfileUserService {
 
 
     @Override
-    public ProfileUserResponse updateProfileUserByUserId(String userId, MultipartFile fileImage) throws Exception {
-        ProfileUser profileUser = profileUserRepository.findById(userId).get();
-        var image = imageController.postImage(fileImage,userId);
-        profileUser.setAvatar(image.getData().getImgName());
+    public ProfileUserResponse updateProfileUserByUserId( MultipartFile fileImage) throws Exception {
+        ProfileUser profileUser = profileUserRepository.findById(utilities.getUserId()).get();
+        var image = imageService.postImage(fileImage);
+        profileUser.setAvatar(image.getImgName());
         profileUserRepository.save(profileUser);
         return profileUserMapper.toProfileUserResponse(profileUser);
     }
 
     @Override
-    public ProfileUserResponse updateInformationByUserId(String userId, ProfileUserRequest profileUserRequest) {
-        ProfileUser profileUser = profileUserRepository.findById(userId).get();
+    public ProfileUserResponse updateInformationByUserId(ProfileUserRequest profileUserRequest) {
+        ProfileUser profileUser = profileUserRepository.findById(utilities.getUserId()).get();
         profileUser = profileUserMapper.updateProfileUserFromRequest(profileUserRequest, profileUser);
         profileUserRepository.save(profileUser);
-        profileUserRequest.setId(userId.toString());
+        profileUserRequest.setId(utilities.getUserId().toString());
         return profileUserMapper.toProfileUserResponse(profileUser);
     }
 }

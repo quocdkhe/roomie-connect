@@ -16,7 +16,7 @@ public class ProfileUserController {
 
     private final ProfileUserService profileUserService;
 
-    @PostMapping("/internal")
+    @PostMapping
     public ApiResponse<Object> createProfileUser(@RequestBody ProfileUserRequest profileUserRequest) {
         return ApiResponse.builder()
                 .code(1000)

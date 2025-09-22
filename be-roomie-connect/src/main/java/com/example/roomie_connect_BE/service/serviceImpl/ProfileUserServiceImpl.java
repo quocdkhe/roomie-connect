@@ -57,22 +57,17 @@ public class ProfileUserServiceImpl implements ProfileUserService {
     @Override
     public ProfileUserResponse getProfileUserByUserId(HttpServletRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
         if (authentication == null || !(authentication.getPrincipal() instanceof Jwt)) {
             throw new RuntimeException("No authentication found in security context");
         }
-
         Jwt jwt = (Jwt) authentication.getPrincipal();
-
         String userId = jwt.getSubject();
-
         ProfileUser user = profileUserRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         if ("Empty Avatar".equalsIgnoreCase(user.getAvatar())) {
             return profileUserMapper.toProfileUserResponse(user);
         }
-
         String url;
         try {
             url = minioClient.getPresignedObjectUrl(
@@ -86,11 +81,9 @@ public class ProfileUserServiceImpl implements ProfileUserService {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
         if ("LOCAL".equalsIgnoreCase(user.getProvider()) && !"Empty Avatar".equalsIgnoreCase(user.getAvatar())) {
             user.setAvatar(url);
         }
-
         return profileUserMapper.toProfileUserResponse(user);
     }
 

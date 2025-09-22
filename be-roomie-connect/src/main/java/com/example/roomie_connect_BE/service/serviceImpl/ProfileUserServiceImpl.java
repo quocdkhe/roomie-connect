@@ -17,6 +17,9 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -53,31 +56,18 @@ public class ProfileUserServiceImpl implements ProfileUserService {
 
     @Override
     public ProfileUserResponse getProfileUserByUserId(HttpServletRequest request) {
-        String token = null;
-
-        // Find cookie named "token"
-        if (request.getCookies() != null) {
-            for (Cookie cookie : request.getCookies()) {
-                if ("token".equals(cookie.getName())) {
-                    token = cookie.getValue();
-                    break;
-                }
-            }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !(authentication.getPrincipal() instanceof Jwt)) {
+            throw new RuntimeException("No authentication found in security context");
         }
-
-        if (token == null) {
-            throw new RuntimeException("No token cookie found");
-        }
-
-        String userId = jwtService.getUserIdFromJWT(token);
-
+        Jwt jwt = (Jwt) authentication.getPrincipal();
+        String userId = jwt.getSubject();
         ProfileUser user = profileUserRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         if ("Empty Avatar".equalsIgnoreCase(user.getAvatar())) {
             return profileUserMapper.toProfileUserResponse(user);
         }
-
         String url;
         try {
             url = minioClient.getPresignedObjectUrl(
@@ -91,13 +81,12 @@ public class ProfileUserServiceImpl implements ProfileUserService {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
         if ("LOCAL".equalsIgnoreCase(user.getProvider()) && !"Empty Avatar".equalsIgnoreCase(user.getAvatar())) {
             user.setAvatar(url);
         }
-
         return profileUserMapper.toProfileUserResponse(user);
     }
+
 
     @Override
     public ProfileUserResponse updateProfileUserByUserId(String userId, MultipartFile fileImage) throws Exception {

@@ -54,7 +54,7 @@ public class ProfileUserController {
                 .data(profileUserService.updateInformationByUserId(userId,profileUserRequest))
                 .build();
     }
-    @GetMapping
+    @GetMapping("/all")
     public ApiResponse<Object> getAllProfilesUser() {
         return ApiResponse.builder()
                 .code(1000)

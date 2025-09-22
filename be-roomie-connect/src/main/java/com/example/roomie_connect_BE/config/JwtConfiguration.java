@@ -8,7 +8,7 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 
 @Configuration
 public class JwtConfiguration {
-    @Value("${spring.security.oauth2.resource-server.jwt.issuer-uri}")
+    @Value("${spring.security.oauth2.resource-server.jwt.jwk-set-uri}")
     private String jwtSetUri;
 
 //    @Bean

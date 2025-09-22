@@ -84,6 +84,7 @@ public class AuthServiceImpl implements AuthService {
         log.info("UserId {} ", userId);
         profileUserRequest.setId(userId);
         profileUserRequest.setProvider("LOCAL");
+        profileUserRequest.setAvatar("Empty Avatar");
         return profileUserMapper.toProfileUserResponse(
                 profileUserRepository.save(
                         profileUserMapper.toProfileUser(profileUserRequest)));

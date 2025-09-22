@@ -5,6 +5,7 @@ import com.example.roomie_connect_BE.dto.request.ProfileUserRequest;
 import com.example.roomie_connect_BE.dto.response.ApiResponse;
 import com.example.roomie_connect_BE.service.ProfileUserService;
 import com.example.roomie_connect_BE.utils.Notification;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,12 +26,12 @@ public class ProfileUserController {
                 .build();
     }
 
-    @GetMapping("/{userId}")
-    public ApiResponse<Object> getUserProfile(@PathVariable("userId") String userId) {
+    @GetMapping
+    public ApiResponse<Object> getUserProfile(HttpServletRequest request) {
         return ApiResponse.builder()
                 .code(1000)
                 .message(Notification.GET_PROFILE_SUCCESS.getMessage())
-                .data(profileUserService.getProfileUserByUserId(userId))
+                .data(profileUserService.getProfileUserByUserId(request))
                 .build();
     }
 

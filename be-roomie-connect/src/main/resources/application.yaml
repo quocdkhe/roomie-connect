@@ -1,7 +1,6 @@
 server:
   port: 8080
-  servlet:
-    context-path: /api/v1
+
 spring:
   ai:
     openai:
@@ -62,7 +61,7 @@ springdoc:
   api-docs:
     path: /api-docs
   swagger-ui:
-    path: /swagger-ui
+    path: /swagger-ui-custom.html
     operationsSorter: method
 
 idp:

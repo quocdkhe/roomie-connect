@@ -50,6 +50,9 @@ public class ProfileUserServiceImpl implements ProfileUserService {
     @Override
     public ProfileUserResponse getProfileUserByUserId(String userId) {
         ProfileUser user = profileUserRepository.findById(userId).get();
+        if (user.getAvatar().toString().equalsIgnoreCase("Empty Avatar")) {
+            return profileUserMapper.toProfileUserResponse(user);
+        }
         String url;
         try {
             url = minioClient.getPresignedObjectUrl(

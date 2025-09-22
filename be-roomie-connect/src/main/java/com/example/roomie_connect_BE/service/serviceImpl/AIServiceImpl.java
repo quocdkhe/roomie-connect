@@ -114,9 +114,6 @@ public class AIServiceImpl implements AIService {
     @Override
     public boolean verifyUserImage(MultipartFile file1, MultipartFile file2) {
 
-//        String userId = utilities.getUserId();
-//        ProfileUser user = profileUserRepository.findById(userId)
-//                .orElseThrow(() -> new RuntimeException("User not found"));
 
         Media mediaFromFile = Media.builder()
                 .mimeType(MimeTypeUtils.parseMimeType(file1.getContentType()))

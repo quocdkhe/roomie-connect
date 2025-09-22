@@ -14,10 +14,10 @@ public interface ProfileUserService {
 
     ProfileUserResponse getProfileUserByUserId();
 
-    ProfileUserResponse updateProfileUserByUserId(String userId, MultipartFile fileImage) throws Exception;
+    ProfileUserResponse updateProfileUserByUserId(MultipartFile fileImage) throws Exception;
 
 
-    ProfileUserResponse updateInformationByUserId(String userId, ProfileUserRequest profileUserRequest);
+    ProfileUserResponse updateInformationByUserId( ProfileUserRequest profileUserRequest);
 
     List<ProfileUserResponse> getAllProfilesUser();
 

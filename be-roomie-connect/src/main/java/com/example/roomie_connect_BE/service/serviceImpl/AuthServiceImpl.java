@@ -8,6 +8,7 @@ import com.example.roomie_connect_BE.dto.response.LoginResponse;
 import com.example.roomie_connect_BE.dto.response.ProfileUserResponse;
 import com.example.roomie_connect_BE.feignclient.IdentityClient;
 import com.example.roomie_connect_BE.mapper.ProfileUserMapper;
+import com.example.roomie_connect_BE.repository.ProfileUserRepository;
 import com.example.roomie_connect_BE.service.AuthService;
 import com.example.roomie_connect_BE.service.JWTService;
 import jakarta.servlet.http.HttpServletResponse;
@@ -30,6 +31,7 @@ public class AuthServiceImpl implements AuthService {
     private final IdentityClient identityClient;
     private final JwtDecoder decoder;
     private final ProfileUserMapper profileUserMapper;
+    private final ProfileUserRepository profileUserRepository;
 
     @Value("${idp.client.id}")
     @NonFinal
@@ -38,7 +40,6 @@ public class AuthServiceImpl implements AuthService {
     @Value("${idp.client.secret}")
     @NonFinal
     private String clientSecret;
-
 
 
     @Override
@@ -60,10 +61,8 @@ public class AuthServiceImpl implements AuthService {
     }
 
 
-
     @Override
     public ProfileUserResponse register(ProfileUserRequest profileUserRequest) {
-
 
         log.info("Token is : {}", getTokenClient());
         var creationResponse = identityClient.createUser(getTokenClient(), UserCreationParam.builder()
@@ -83,25 +82,27 @@ public class AuthServiceImpl implements AuthService {
         String userId = extractUserId(creationResponse);
 
         log.info("UserId {} ", userId);
-        profileUserRequest.setUserId(userId);
+        profileUserRequest.setId(userId);
         profileUserRequest.setProvider("LOCAL");
-        return profileUserMapper.toProfileUserResponse(profileUserMapper.toProfileUser(profileUserRequest));
+        return profileUserMapper.toProfileUserResponse(
+                profileUserRepository.save(
+                        profileUserMapper.toProfileUser(profileUserRequest)));
     }
 
 
     @Override
     public void logout(String userId) {
-        identityClient.logoutKeyloak(getTokenClient(),userId);
+        identityClient.logoutKeyloak(getTokenClient(), userId);
     }
 
 
     @Override
     public ProfileUserResponse changePassword(ProfileUserRequest profileUserRequest) {
         var user = identityClient.changePassword(getTokenClient(), Credential.builder()
-                        .temporary(false)
-                        .type("password")
-                        .value(profileUserRequest.getPassword())
-                .build(),profileUserRequest.getUserId());
+                .temporary(false)
+                .type("password")
+                .value(profileUserRequest.getPassword())
+                .build(), profileUserRequest.getId());
         return ProfileUserResponse.builder()
                 .password(profileUserRequest.getPassword())
                 .build();

@@ -13,7 +13,6 @@ public interface AuthService {
 
     ProfileUserResponse register(ProfileUserRequest profileUserRequest);
 
-
     ProfileUserResponse changePassword(ProfileUserRequest profileUserRequest);
 
     void logout(String userId);

@@ -1,7 +1,6 @@
 package com.example.roomie_connect_BE.entity;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import jakarta.persistence.*;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,9 +12,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
 public class ProfileUser {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
     private String userName;
@@ -24,7 +23,6 @@ public class ProfileUser {
     private String phoneNumber;
     private String address;
     private String avatar;
-    private String userId;
     private String provider;
 
 

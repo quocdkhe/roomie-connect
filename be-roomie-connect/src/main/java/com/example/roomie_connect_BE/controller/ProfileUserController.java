@@ -44,7 +44,6 @@ public class ProfileUserController {
                 .build();
     }
 
-
     @PostMapping("/update-profile/{userId}")
     public ApiResponse<Object> updateUserProfile(@PathVariable("userId") String userId,
                                                  @RequestBody ProfileUserRequest profileUserRequest){

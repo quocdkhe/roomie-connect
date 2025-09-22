@@ -27,11 +27,11 @@ public class ProfileUserController {
     }
 
     @GetMapping
-    public ApiResponse<Object> getUserProfile(HttpServletRequest request) {
+    public ApiResponse<Object> getUserProfile() {
         return ApiResponse.builder()
                 .code(1000)
                 .message(Notification.GET_PROFILE_SUCCESS.getMessage())
-                .data(profileUserService.getProfileUserByUserId(request))
+                .data(profileUserService.getProfileUserByUserId())
                 .build();
     }
 

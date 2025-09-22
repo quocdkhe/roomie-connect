@@ -1,6 +1,7 @@
 server:
   port: 8080
-
+  servlet:
+    context-path: /api/v1
 spring:
   ai:
     openai:
@@ -39,7 +40,7 @@ spring:
         registration:
           keycloak:
             client-id: ${CLIENT_ID:roomie-connect_app}
-            client-secret: ${CLIENT_SECRET:wm9KcmIbhLPr25HzwXyUomfaW3P4xH45}
+            client-secret: ${CLIENT_SECRET:lJXIa5pROFTk63xSz9ztnvAid9VeU8Ic}
             authorization-grant-type: authorization_code
             scope: openid,profile,email
             redirect-uri: ${REDIRECT_URI:http://localhost:3000/*}
@@ -67,6 +68,6 @@ springdoc:
 idp:
   client:
     id: ${CLIENT_ID:roomie-connect_app}
-    secret: ${CLIENT_SECRET:pAjbdjOvlBitMxumeso9xZd9U3A143za}
+    secret: ${CLIENT_SECRET:lJXIa5pROFTk63xSz9ztnvAid9VeU8Ic}
   token:
     endpoint: ${TOKEN_URI:http://localhost:8001}

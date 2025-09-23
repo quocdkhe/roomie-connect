@@ -20,14 +20,7 @@ public class ProfileUserController {
     private final ProfileUserService profileUserService;
     private final ImageService imageService;
 
-    @PostMapping
-    public ApiResponse<Object> createProfileUser(@RequestBody ProfileUserRequest profileUserRequest) {
-        return ApiResponse.builder()
-                .code(1000)
-                .message(Notification.CREATE_PROFILE_SUCCESS.getMessage())
-                .data(profileUserService.createProfileUser(profileUserRequest))
-                .build();
-    }
+
 
     @GetMapping
     public ApiResponse<Object> getUserProfile() {

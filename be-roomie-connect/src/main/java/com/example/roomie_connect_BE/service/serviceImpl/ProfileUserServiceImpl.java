@@ -43,13 +43,7 @@ public class ProfileUserServiceImpl implements ProfileUserService {
     private final Utilities utilities;
     private final ImageService imageService;
 
-    @Override
-    public ProfileUserResponse createProfileUser(ProfileUserRequest profileUserRequest) {
-        ProfileUser profileUser = profileUserMapper.toProfileUser(profileUserRequest);
-        profileUser.setAvatar("Empty Avatar");
-        profileUserRepository.save(profileUser);
-        return profileUserMapper.toProfileUserResponse(profileUser);
-    }
+
 
     @Override
     public List<ProfileUserResponse> getAllProfilesUser() {

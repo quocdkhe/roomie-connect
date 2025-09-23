@@ -10,7 +10,6 @@ import java.util.List;
 
 public interface ProfileUserService {
 
-    ProfileUserResponse createProfileUser(ProfileUserRequest profileUserRequest);
 
     ProfileUserResponse getProfileUserByUserId();
 

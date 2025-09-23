@@ -62,7 +62,7 @@ public class ImageServiceImpl implements ImageService {
     public ImageResponse postImageVerify(MultipartFile imageAvar, MultipartFile imageVerify) throws Exception {
         var check = aiService.verifyUserImage(imageAvar,imageVerify);
         if(check == false) return ImageResponse.builder()
-                .imgName("Verify fail, not same person")
+                .imgName(check + "")
                 .build();
 
         var booleanExistedBucket = minioClient

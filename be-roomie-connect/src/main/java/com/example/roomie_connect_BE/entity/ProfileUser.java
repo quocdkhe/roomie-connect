@@ -7,6 +7,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Data
 @Builder
@@ -25,5 +28,8 @@ public class ProfileUser {
     private String avatar;
     private String provider;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    List<WebSocketSession> sessions = new ArrayList<>();
 
 }

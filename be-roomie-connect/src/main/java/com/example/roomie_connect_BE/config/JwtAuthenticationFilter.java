@@ -44,7 +44,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 JwtAuthenticationToken authentication = (JwtAuthenticationToken) keycloakJwtAuthenticationConverter.convert(decodedJwt);
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
+                log.info(authentication.getToken().getSubject());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception ex) {

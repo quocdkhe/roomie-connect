@@ -59,6 +59,7 @@ public class ProfileUserServiceImpl implements ProfileUserService {
         if ("Empty Avatar".equalsIgnoreCase(user.getAvatar())) {
             return profileUserMapper.toProfileUserResponse(user);
         }
+        log.info("avar: " + user.getAvatar());
         String url;
         try {
             url = minioClient.getPresignedObjectUrl(

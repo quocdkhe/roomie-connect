@@ -113,22 +113,17 @@ public class AIServiceImpl implements AIService {
 
     @Override
     public boolean verifyUserImage(MultipartFile file1, MultipartFile file2) {
-
-
         Media mediaFromFile = Media.builder()
                 .mimeType(MimeTypeUtils.parseMimeType(file1.getContentType()))
                 .data(file1.getResource())
                 .build();
-
         Media mediaFromAvatar = Media.builder()
                 .mimeType(MimeTypeUtils.parseMimeType(file2.getContentType()))
                 .data(file2.getResource())
                 .build();
-
         SystemMessage system = new SystemMessage("""
                     Bạn là RoomieApp AI, bạn cần kiểm tra thật kỹ người trong hai ảnh có giống nhau hay cùng là một người không, kiểm tra thật kỹ.
                 """);
-
         String msg = "Kiểm tra người trong 2 ảnh có phải là một không, kiểm tra thật kỹ lưỡng nhiều lần. Chỉ trả về đúng một từ khóa 'true' hoặc 'false'.";
         UserMessage promptMessage = new UserMessage(msg);
 
@@ -145,6 +140,5 @@ public class AIServiceImpl implements AIService {
                 });
         log.info("Response from AI: " + response);
         return response;
-
     }
 }

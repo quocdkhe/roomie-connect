@@ -20,8 +20,6 @@ public class ProfileUserController {
     private final ProfileUserService profileUserService;
     private final ImageService imageService;
 
-
-
     @GetMapping
     public ApiResponse<Object> getUserProfile() {
         return ApiResponse.builder()
@@ -65,12 +63,10 @@ public class ProfileUserController {
             @RequestParam("imageAvar") MultipartFile imageAvar, @RequestParam("imageVerify") MultipartFile imageVerify
     ) throws Exception {
 
-        ImageResponse payload = imageService.postImageVerify(imageAvar, imageVerify);
-
         return ApiResponse.<ImageResponse>builder()
                 .code(1000)
                 .message(Notification.POST_IMAGE_SUCCESS.getMessage())
-                .data(payload)
+                .data(imageService.postImageVerify(imageAvar, imageVerify))
                 .build();
     }
 }

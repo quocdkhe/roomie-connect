@@ -3,6 +3,8 @@ package com.example.roomie_connect_BE.controller;
 
 import com.example.roomie_connect_BE.dto.request.ProfileUserRequest;
 import com.example.roomie_connect_BE.dto.response.ApiResponse;
+import com.example.roomie_connect_BE.dto.response.ImageResponse;
+import com.example.roomie_connect_BE.service.ImageService;
 import com.example.roomie_connect_BE.service.ProfileUserService;
 import com.example.roomie_connect_BE.utils.Notification;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class ProfileUserController {
 
     private final ProfileUserService profileUserService;
+    private final ImageService imageService;
 
     @PostMapping
     public ApiResponse<Object> createProfileUser(@RequestBody ProfileUserRequest profileUserRequest) {
@@ -27,34 +30,35 @@ public class ProfileUserController {
     }
 
     @GetMapping
-    public ApiResponse<Object> getUserProfile(HttpServletRequest request) {
+    public ApiResponse<Object> getUserProfile() {
         return ApiResponse.builder()
                 .code(1000)
                 .message(Notification.GET_PROFILE_SUCCESS.getMessage())
-                .data(profileUserService.getProfileUserByUserId(request))
+                .data(profileUserService.getProfileUserByUserId())
                 .build();
     }
 
-    @PostMapping("/update/{userId}")
-    public ApiResponse<Object> updateUserProfileImage(@PathVariable("userId") String userId,
+    @PostMapping("/update")
+    public ApiResponse<Object> updateUserProfileImage(
             @RequestParam("img") MultipartFile imageFile) throws Exception {
         return ApiResponse.builder()
                 .code(1000)
                 .message(Notification.UPDATE_PROFILE_SUCCESS.getMessage())
-                .data(profileUserService.updateProfileUserByUserId(userId, imageFile))
+                .data(profileUserService.updateProfileUserByUserId(imageFile))
                 .build();
     }
 
-    @PostMapping("/update-profile/{userId}")
-    public ApiResponse<Object> updateUserProfile(@PathVariable("userId") String userId,
-                                                 @RequestBody ProfileUserRequest profileUserRequest){
+    @PostMapping("/update-profile")
+    public ApiResponse<Object> updateUserProfile(
+            @RequestBody ProfileUserRequest profileUserRequest) {
         return ApiResponse.builder()
                 .code(1000)
                 .message(Notification.UPDATE_PROFILE_SUCCESS.getMessage())
-                .data(profileUserService.updateInformationByUserId(userId,profileUserRequest))
+                .data(profileUserService.updateInformationByUserId(profileUserRequest))
                 .build();
     }
-    @GetMapping
+
+    @GetMapping("/all")
     public ApiResponse<Object> getAllProfilesUser() {
         return ApiResponse.builder()
                 .code(1000)
@@ -63,4 +67,17 @@ public class ProfileUserController {
                 .build();
     }
 
+    @PostMapping("/upload")
+    public ApiResponse<ImageResponse> postImageVerify(
+            @RequestParam("imageAvar") MultipartFile imageAvar, @RequestParam("imageVerify") MultipartFile imageVerify
+    ) throws Exception {
+
+        ImageResponse payload = imageService.postImageVerify(imageAvar, imageVerify);
+
+        return ApiResponse.<ImageResponse>builder()
+                .code(1000)
+                .message(Notification.POST_IMAGE_SUCCESS.getMessage())
+                .data(payload)
+                .build();
+    }
 }

@@ -4,7 +4,7 @@ server:
 spring:
   ai:
     openai:
-      api-key: ${OPEN_AI_KEY}
+      api-key: ${OPEN_AI_KEY:AIzaSyAGvATwDdavDTN-7fk6lsv2mZroP94cJaM}
       chat:
         base-url: ${OPEN_AI_URL:https://generativelanguage.googleapis.com}
         completions-path: ${OPEN_AI_PATH:/v1beta/openai/chat/completions}

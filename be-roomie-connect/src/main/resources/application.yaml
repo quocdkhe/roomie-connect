@@ -3,6 +3,14 @@ server:
   servlet:
     context-path: /api/v1
 spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${SPRING_MAIL_USERNAME:lenam7546@gmail.com}
+    password: ${SPRING_MAIL_PASSWORD:dtmbwxrcmdtjprts}
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
   ai:
     openai:
       api-key: ${OPEN_AI_KEY:AIzaSyAGvATwDdavDTN-7fk6lsv2mZroP94cJaM}

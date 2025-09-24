@@ -2,18 +2,14 @@ package com.example.roomie_connect_BE.service.serviceImpl;
 
 
 import com.example.roomie_connect_BE.dto.response.ImageResponse;
-import com.example.roomie_connect_BE.dto.response.UrlImageResponse;
-import com.example.roomie_connect_BE.repository.ProfileUserRepository;
+import com.example.roomie_connect_BE.repository.UserRepository;
 import com.example.roomie_connect_BE.service.AIService;
 import com.example.roomie_connect_BE.service.ImageService;
 import com.example.roomie_connect_BE.utils.Utilities;
 import io.minio.*;
-import io.minio.http.Method;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +19,7 @@ public class ImageServiceImpl implements ImageService {
 
     private final MinioClient minioClient;
 
-    private final ProfileUserRepository profileUserRepository;
+    private final UserRepository userRepository;
 
     private final Utilities utilities;
 
@@ -83,9 +79,9 @@ public class ImageServiceImpl implements ImageService {
                         .contentType(imageAvar.getContentType())
                         .build());
 
-        var userProfile = profileUserRepository.findById(utilities.getUserId()).get();
+        var userProfile = userRepository.findById(utilities.getUserId()).get();
         userProfile.setAvatar(imageName);
-        profileUserRepository.save(userProfile);
+        userRepository.save(userProfile);
 
         return ImageResponse.builder()
                 .imgName(imageName)

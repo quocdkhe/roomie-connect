@@ -5,27 +5,24 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.LastModifiedDate;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class WebSocketSession {
+public class MatchRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String sessionId;
+    private String status;
 
     @ManyToOne
     @JoinColumn(name = "users_id")
     private User user;
 
-    @LastModifiedDate
-    private LocalDateTime createdAt;
+    @ManyToOne
+    @JoinColumn(name = "post_id")
+    private Post post;
 }

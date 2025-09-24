@@ -1,11 +1,11 @@
 package com.example.roomie_connect_BE.controller;
 
 
-import com.example.roomie_connect_BE.dto.request.ProfileUserRequest;
+import com.example.roomie_connect_BE.dto.request.UserRequest;
 import com.example.roomie_connect_BE.dto.response.ApiResponse;
 import com.example.roomie_connect_BE.dto.response.ImageResponse;
 import com.example.roomie_connect_BE.service.ImageService;
-import com.example.roomie_connect_BE.service.ProfileUserService;
+import com.example.roomie_connect_BE.service.UserService;
 import com.example.roomie_connect_BE.utils.Notification;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("/api/v1/profile")
+@RequestMapping("/profile")
 @RequiredArgsConstructor
 public class ProfileUserController {
 
-    private final ProfileUserService profileUserService;
+    private final UserService profileUserService;
     private final ImageService imageService;
 
     @GetMapping
@@ -41,11 +41,11 @@ public class ProfileUserController {
 
     @PostMapping("/update-profile")
     public ApiResponse<Object> updateUserProfile(
-            @RequestBody ProfileUserRequest profileUserRequest) {
+            @RequestBody UserRequest userRequest) {
         return ApiResponse.builder()
                 .code(1000)
                 .message(Notification.UPDATE_PROFILE_SUCCESS.getMessage())
-                .data(profileUserService.updateInformationByUserId(profileUserRequest))
+                .data(profileUserService.updateInformationByUserId(userRequest))
                 .build();
     }
 

@@ -33,22 +33,22 @@ spring:
     oauth2:
       resource-server:
         jwt:
-          issuer-uri: ${ISSUER_URI:http://localhost:8001/realms/group1}
-          jwk-set-uri: ${JWK_SET_URL:http://localhost:8001/realms/group1/protocol/openid-connect/certs}
+          issuer-uri: ${ISSUER_URI:http://13.115.95.121:8001/realms/group1}
+          jwk-set-uri: ${JWK_SET_URL:http://13.115.95.121:8001/realms/group1/protocol/openid-connect/certs}
       client:
         registration:
           keycloak:
             client-id: ${CLIENT_ID:roomie-connect_app}
-            client-secret: ${CLIENT_SECRET:lJXIa5pROFTk63xSz9ztnvAid9VeU8Ic}
+            client-secret: ${CLIENT_SECRET:rY4wgcH11RxwNSDlQuQk6GYtcpRRuJ0F}
             authorization-grant-type: authorization_code
             scope: openid,profile,email
-            redirect-uri: ${REDIRECT_URI:http://localhost:3000/*}
+            redirect-uri: ${REDIRECT_URI:http://13.115.95.121:3000/*}
         provider:
           keycloak:
-            authorization-uri: ${AUTHORIZATION_URI:http://localhost:8001/realms/group1/protocol/openid-connect/auth}
-            token-uri: ${TOKEN_URI:http://localhost:8001/realms/group1/protocol/openid-connect/token}
-            user-info-uri: ${USER_INFO_URI:http://localhost:8001/realms/group1/protocol/openid-connect/userinfo}
-            jwk-set-uri: ${JWK_SET_URI:http://localhost:8001/realms/group1/protocol/openid-connect/certs}
+            authorization-uri: ${AUTHORIZATION_URI:http://13.115.95.121:8001/realms/group1/protocol/openid-connect/auth}
+            token-uri: ${TOKEN_URI:http://13.115.95.121:8001/realms/group1/protocol/openid-connect/token}
+            user-info-uri: ${USER_INFO_URI:http://13.115.95.121:8001/realms/group1/protocol/openid-connect/userinfo}
+            jwk-set-uri: ${JWK_SET_URI:http://13.115.95.121:8001/realms/group1/protocol/openid-connect/certs}
             user-name-attribute: preferred_username
 
 minio:
@@ -67,6 +67,6 @@ springdoc:
 idp:
   client:
     id: ${CLIENT_ID:roomie-connect_app}
-    secret: ${CLIENT_SECRET:lJXIa5pROFTk63xSz9ztnvAid9VeU8Ic}
+    secret: ${CLIENT_SECRET:rY4wgcH11RxwNSDlQuQk6GYtcpRRuJ0F}
   token:
-    endpoint: ${TOKEN_URI:http://localhost:8001}
+    endpoint: ${TOKEN_URI:http://13.115.95.121:8001}

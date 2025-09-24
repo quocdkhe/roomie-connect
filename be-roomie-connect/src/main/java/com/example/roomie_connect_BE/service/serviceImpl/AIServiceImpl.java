@@ -2,14 +2,10 @@ package com.example.roomie_connect_BE.service.serviceImpl;
 
 
 import com.example.roomie_connect_BE.entity.ChatMessageAI;
-import com.example.roomie_connect_BE.entity.ProfileUser;
-import com.example.roomie_connect_BE.mapper.ProfileUserMapper;
-import com.example.roomie_connect_BE.repository.ProfileUserRepository;
+import com.example.roomie_connect_BE.repository.UserRepository;
 import com.example.roomie_connect_BE.service.AIService;
 import com.example.roomie_connect_BE.utils.Utilities;
-import io.minio.GetPresignedObjectUrlArgs;
 import io.minio.MinioClient;
-import io.minio.http.Method;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
@@ -18,15 +14,11 @@ import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.content.Media;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MimeTypeUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.Collections;
 import java.util.List;
 
@@ -38,7 +30,7 @@ public class AIServiceImpl implements AIService {
     private final Utilities utilities;
     private final MinioClient minioClient;
     private final String BUCKET_NAME_AVAR = "image-avar";
-    private final ProfileUserRepository profileUserRepository;
+    private final UserRepository userRepository;
 
 
     public List<Object> chatWithImage(MultipartFile file, String message) throws IOException {

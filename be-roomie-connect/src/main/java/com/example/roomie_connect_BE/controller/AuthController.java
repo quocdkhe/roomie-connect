@@ -2,7 +2,7 @@ package com.example.roomie_connect_BE.controller;
 
 
 import com.example.roomie_connect_BE.dto.request.LoginRequest;
-import com.example.roomie_connect_BE.dto.request.ProfileUserRequest;
+import com.example.roomie_connect_BE.dto.request.UserRequest;
 import com.example.roomie_connect_BE.dto.response.ApiResponse;
 import com.example.roomie_connect_BE.dto.response.LoginResponse;
 import com.example.roomie_connect_BE.service.AuthService;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/identity")
+@RequestMapping("/identity")
 public class AuthController {
 
     private final AuthService authService;
@@ -40,11 +40,11 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ApiResponse<Object> register(@RequestBody ProfileUserRequest profileUserRequest) {
+    public ApiResponse<Object> register(@RequestBody UserRequest userRequest) {
         return ApiResponse.builder()
                 .code(1000)
                 .message(Notification.REGISTER_SUCCESS.getMessage())
-                .data(authService.register(profileUserRequest))
+                .data(authService.register(userRequest))
                 .build();
     }
 
@@ -64,7 +64,7 @@ public class AuthController {
     }
 
     @PostMapping("/change-pass")
-    public ApiResponse<Object> changePasswordUser(@RequestBody ProfileUserRequest profileUserRequest) {
+    public ApiResponse<Object> changePasswordUser(@RequestBody UserRequest profileUserRequest) {
         return ApiResponse.builder()
                 .code(1000)
                 .message("")

@@ -2,18 +2,18 @@ package com.example.roomie_connect_BE.service;
 
 
 import com.example.roomie_connect_BE.dto.request.LoginRequest;
-import com.example.roomie_connect_BE.dto.request.ProfileUserRequest;
+import com.example.roomie_connect_BE.dto.request.UserRequest;
 import com.example.roomie_connect_BE.dto.response.LoginResponse;
-import com.example.roomie_connect_BE.dto.response.ProfileUserResponse;
+import com.example.roomie_connect_BE.dto.response.UserResponse;
 import jakarta.servlet.http.HttpServletResponse;
 
 public interface AuthService {
 
     LoginResponse loginKeyCloak(LoginRequest loginRequest, HttpServletResponse response);
 
-    ProfileUserResponse register(ProfileUserRequest profileUserRequest);
+    UserResponse register(UserRequest profileUserRequest);
 
-    ProfileUserResponse changePassword(ProfileUserRequest profileUserRequest);
+    UserResponse changePassword(UserRequest profileUserRequest);
 
     void logout(String userId);
 

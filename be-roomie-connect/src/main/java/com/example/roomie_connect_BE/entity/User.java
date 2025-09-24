@@ -1,7 +1,6 @@
 package com.example.roomie_connect_BE.entity;
 
 import jakarta.persistence.*;
-import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,13 +9,13 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class ProfileUser {
+@Table(name = "users")
+public class User {
     @Id
     private String id;
 
@@ -27,9 +26,15 @@ public class ProfileUser {
     private String address;
     private String avatar;
     private String provider;
+    private boolean isVerified;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
-    List<WebSocketSession> sessions = new ArrayList<>();
+    private List<Post> posts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<MatchRequest> matchRequests = new ArrayList<>();
+
 
 }

@@ -25,6 +25,6 @@ public class WebSocketSessionServiceImpl implements WebSocketSessionService {
 
     @Override
     public void deleteBySocketSessionId(String socketSessionId) {
-        webSocketSessionRepository.deleteBySocketSessionId(socketSessionId);
+        webSocketSessionRepository.deleteBySessionId(socketSessionId);
     }
 }

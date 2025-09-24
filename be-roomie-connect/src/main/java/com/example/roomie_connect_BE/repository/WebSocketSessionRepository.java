@@ -10,7 +10,6 @@ import java.util.List;
 @Repository
 public interface WebSocketSessionRepository extends JpaRepository<WebSocketSession, Long> {
 
-    void deleteBySocketSessionId(String socketSessionId);
+    void deleteBySessionId(String socketSessionId);
 
-    List<WebSocketSession> findAllByUserIdIn(List<String> userIds);
 }

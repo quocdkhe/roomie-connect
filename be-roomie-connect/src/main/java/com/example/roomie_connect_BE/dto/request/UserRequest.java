@@ -5,14 +5,11 @@ import lombok.Data;
 
 @Data
 @Builder
-public class ProfileUserRequest {
-    private String id;
+public class UserRequest {
     private String userName;
-    private String password;
     private String email;
     private String phoneNumber;
+    private String password;
     private String address;
-    private String avatar;
-    private String provider;
 
 }

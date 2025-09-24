@@ -3,14 +3,15 @@ package com.example.roomie_connect_BE.service.serviceImpl;
 
 import com.example.roomie_connect_BE.dto.*;
 import com.example.roomie_connect_BE.dto.request.LoginRequest;
-import com.example.roomie_connect_BE.dto.request.ProfileUserRequest;
+import com.example.roomie_connect_BE.dto.request.UserRequest;
 import com.example.roomie_connect_BE.dto.response.LoginResponse;
-import com.example.roomie_connect_BE.dto.response.ProfileUserResponse;
+import com.example.roomie_connect_BE.dto.response.UserResponse;
 import com.example.roomie_connect_BE.feignclient.IdentityClient;
-import com.example.roomie_connect_BE.mapper.ProfileUserMapper;
-import com.example.roomie_connect_BE.repository.ProfileUserRepository;
+import com.example.roomie_connect_BE.mapper.UserMapper;
+import com.example.roomie_connect_BE.repository.UserRepository;
 import com.example.roomie_connect_BE.service.AuthService;
 import com.example.roomie_connect_BE.service.JWTService;
+import com.example.roomie_connect_BE.utils.Utilities;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.NonFinal;
@@ -30,8 +31,9 @@ public class AuthServiceImpl implements AuthService {
     private final JWTService jwtService;
     private final IdentityClient identityClient;
     private final JwtDecoder decoder;
-    private final ProfileUserMapper profileUserMapper;
-    private final ProfileUserRepository profileUserRepository;
+    private final UserMapper userMapper;
+    private final UserRepository userRepository;
+    private final Utilities utilities;
 
     @Value("${idp.client.id}")
     @NonFinal
@@ -62,7 +64,7 @@ public class AuthServiceImpl implements AuthService {
 
 
     @Override
-    public ProfileUserResponse register(ProfileUserRequest profileUserRequest) {
+    public UserResponse register(UserRequest profileUserRequest) {
 
         log.info("Token is : {}", getTokenClient());
         var creationResponse = identityClient.createUser(getTokenClient(), UserCreationParam.builder()
@@ -78,16 +80,13 @@ public class AuthServiceImpl implements AuthService {
                         .value(profileUserRequest.getPassword())
                         .build()))
                 .build());
-
         String userId = extractUserId(creationResponse);
-
         log.info("UserId {} ", userId);
-        profileUserRequest.setId(userId);
-        profileUserRequest.setProvider("LOCAL");
-        profileUserRequest.setAvatar("Empty Avatar");
-        return profileUserMapper.toProfileUserResponse(
-                profileUserRepository.save(
-                        profileUserMapper.toProfileUser(profileUserRequest)));
+        var user = userMapper.toProfileUser(profileUserRequest);
+        user.setId(userId);
+        user.setProvider("LOCAL");
+        user.setAvatar("Empty Avatar");
+        return userMapper.toProfileUserResponse(userRepository.save(user));
     }
 
 
@@ -98,14 +97,15 @@ public class AuthServiceImpl implements AuthService {
 
 
     @Override
-    public ProfileUserResponse changePassword(ProfileUserRequest profileUserRequest) {
+    public UserResponse changePassword(UserRequest profileUserRequest) {
+        var id = utilities.getUserId();
         var user = identityClient.changePassword(getTokenClient(), Credential.builder()
                 .temporary(false)
                 .type("password")
                 .value(profileUserRequest.getPassword())
-                .build(), profileUserRequest.getId());
-        return ProfileUserResponse.builder()
-                .password(profileUserRequest.getPassword())
+                .build(), id);
+        return UserResponse.builder()
+                .id(id)
                 .build();
     }
 

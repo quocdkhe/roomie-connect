@@ -33,8 +33,9 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(req -> req
-                        .requestMatchers("/oauth2/**", "/api/v1/identity/**","/v3/api-docs/**"
-                                ,  "/swagger-ui/**", "/openapi.yaml", "/api-docs", "/api-docs.yaml", "/ai/**").permitAll()
+                        .requestMatchers("/oauth2/**", "/identity/**"
+                                ,  "/swagger-ui/**", "/api-docs"
+                                , "/ai/**").permitAll()
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwt -> jwt.jwtAuthenticationConverter(keycloakJwtAuthenticationConverter))

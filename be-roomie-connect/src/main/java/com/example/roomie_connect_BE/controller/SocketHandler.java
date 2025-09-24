@@ -6,7 +6,7 @@ import com.corundumstudio.socketio.annotation.OnConnect;
 import com.corundumstudio.socketio.annotation.OnDisconnect;
 
 import com.example.roomie_connect_BE.entity.WebSocketSession;
-import com.example.roomie_connect_BE.repository.ProfileUserRepository;
+import com.example.roomie_connect_BE.repository.UserRepository;
 import com.example.roomie_connect_BE.service.JWTService;
 import com.example.roomie_connect_BE.service.WebSocketSessionService;
 import jakarta.annotation.PostConstruct;
@@ -25,7 +25,7 @@ public class SocketHandler {
     private final SocketIOServer server;
     private final JWTService jwtService;
     private final WebSocketSessionService webSocketSessionService;
-    private final ProfileUserRepository profileUserRepository;
+    private final UserRepository userRepository;
 
     @OnConnect
     public void clientConnected(SocketIOClient socketIOClient) {
@@ -38,9 +38,8 @@ public class SocketHandler {
                 return;
             }
             webSocketSessionService.create(WebSocketSession.builder()
-                    .socketSessionId(socketIOClient.getSessionId().toString())
-                    .user(profileUserRepository.findById(userId).get())
-                    .createdAt(Instant.now())
+                    .sessionId(socketIOClient.getSessionId().toString())
+                    .user(userRepository.findById(userId).get())
                     .build());
             log.info("Socket Client {}: Kết nối thành công với userId: {}", socketIOClient.getSessionId(), userId);
         } catch (Exception e) {
